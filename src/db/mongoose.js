@@ -18,9 +18,22 @@ mongoose.connect('mongodb://localhost:27017/task-manager-api' , { useNewUrlParse
 */
 const User_data = mongoose.model('users' , {                                                           // if we had written ("user" , {)} it becomes "users" in compass. user = collection
     name : {
-        type : String,
-        required : true
+        type : String ,
+        required : true ,
+        trim : true
     },
+
+    email : {
+        type : String ,
+        required : true ,
+        trim : true ,
+        validate(i){
+            if(validator.isEmail(i) === false)
+            {
+                throw new Error("email invalid")
+            }
+        }
+    } ,
 
     age : {
         type : Number,
@@ -30,13 +43,27 @@ const User_data = mongoose.model('users' , {                                    
                 throw new Error("Please give age above 0")
             }
         }
+    } ,
+
+    password : {
+        type : String ,
+        required : true ,
+        minlength: 6 ,
+        trim : true ,
+        validate(i){
+            if(i.includes("password")===true)
+            {
+                throw new Error("password cannot be 'password'")
+            }
+        }
     }
 })
 
 // create a new User instance called me
 const me = new User_data({
-    name : 'dev',
-    age : 3
+    name : 'dev' ,
+    email : 'dev263@gmail.com' ,
+    password : 'password'
 })
 
 me.save()                           // The .save() method returns a Promise, and you handle the result using .then() and .catch()
@@ -46,6 +73,7 @@ me.save()                           // The .save() method returns a Promise, and
     .catch((error) => {
         console.log(error);
     })
+
 
 /* example 2 
 

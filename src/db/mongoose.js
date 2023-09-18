@@ -79,29 +79,30 @@ mongoose.connect('mongodb://localhost:27017/task-manager-api' , { useNewUrlParse
 /* example 2 = task
 
 
-// const User = mongoose.model('task' , {
-//     discription : {
-//         type : String
-//     },
+const Task = mongoose.model('tasks' , {      //  this written 'tasks' is tasks written in compass task-manager-api -> tasks
+    discription : {
+        type : String
+    },
 
-//     completed : {
-//         type : Boolean
-//     }
-// })
+    completed : {
+        type : Boolean
+    }
+})
 
-//// create a new User instance called task1
-// const task1 = new User({
-//     discription : 'this is task 1',
-//     completed : true
-// })
+//// create a new Task instance called task1
 
-// task1.save()
-//     .then(() => {
-//         console.log(task1);
-//     })
-//     .catch(() => {
-//         console.log("error reported");
-//     })
+const task1 = new Task({
+    discription : 'this is task 1',
+    completed : true
+})
+
+task1.save()
+    .then(() => {
+        console.log(task1);
+    })
+    .catch(() => {
+        console.log("error reported");
+    })
 
 */
 

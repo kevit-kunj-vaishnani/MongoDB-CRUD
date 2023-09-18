@@ -14,4 +14,4 @@ const Task = mongoose.model('tasks' , {      //  this written 'tasks' is tasks w
 module.exports = Task
 
 
-// step by step what we have to do is written in text editor file name = " postman mongoose (all step).txt ""
+// step by step what we have to do is written in step_by_step_process.js file which is inside task-manager folder in vs code

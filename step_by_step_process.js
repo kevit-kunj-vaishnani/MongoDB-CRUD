@@ -73,7 +73,7 @@ me.save()                           // The .save() method returns a Promise, and
 /* example 2 = task
 
 
-const User = mongoose.model('task' , {
+const Task = mongoose.model('tasks' , {      //  this written 'tasks' is tasks written in compass task-manager-api -> tasks
     discription : {
         type : String
     },
@@ -83,8 +83,8 @@ const User = mongoose.model('task' , {
     }
 })
 
-// create a new User instance called task1
-const task1 = new User({
+// create a new Task instance called task1
+const task1 = new Task({
     discription : 'this is task 1',
     completed : true
 })

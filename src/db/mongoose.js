@@ -2,7 +2,7 @@
 
 
 const mongoose = require('mongoose')                                                             // importing mongoose npm library
-const validator = require('validator')
+// const validator = require('validator')
 
 mongoose.connect('mongodb://localhost:27017/task-manager-api' , { useNewUrlParser : true  }  )   // for connection with task-manager-api database
 //.... 
@@ -16,66 +16,67 @@ mongoose.connect('mongodb://localhost:27017/task-manager-api' , { useNewUrlParse
 // mongoose.model() method is used to define and create models for interacting with MongoDB collections.
 // User_data is model name
 */
-const User_data = mongoose.model('users' , {                                                           // if we had written ("user" , {)} it becomes "users" in compass. user = collection
-    name : {
-        type : String ,
-        required : true ,
-        trim : true
-    },
+// example 1 = users
+// const User_data = mongoose.model('users' , {                                                           // if we had written ("user" , {)} it becomes "users" in compass. user = collection
+//     name : {
+//         type : String ,
+//         required : true ,
+//         trim : true
+//     },
 
-    email : {
-        type : String ,
-        required : true ,
-        trim : true ,
-        validate(i){
-            if(validator.isEmail(i) === false)
-            {
-                throw new Error("email invalid")
-            }
-        }
-    } ,
+//     email : {
+//         type : String ,
+//         required : true ,
+//         trim : true ,
+//         validate(i){
+//             if(validator.isEmail(i) === false)
+//             {
+//                 throw new Error("email invalid")
+//             }
+//         }
+//     } ,
 
-    age : {
-        type : Number,
-        validate(i){
-            if(i<0)
-            {
-                throw new Error("Please give age above 0")
-            }
-        }
-    } ,
+//     age : {
+//         type : Number,
+//         validate(i){
+//             if(i<0)
+//             {
+//                 throw new Error("Please give age above 0")
+//             }
+//         }
+//     } ,
 
-    password : {
-        type : String ,
-        required : true ,
-        minlength: 6 ,
-        trim : true ,
-        validate(i){
-            if(i.includes("password")===true)
-            {
-                throw new Error("password cannot be 'password'")
-            }
-        }
-    }
-})
+//     password : {
+//         type : String ,
+//         required : true ,
+//         minlength: 6 ,
+//         trim : true ,
+//         validate(i){
+//             if(i.toLowerCase().includes("password")===true)
+//             {
+//                 throw new Error("password cannot be 'password'")
+//             }
+//         }
+//     }
+// })
 
-// create a new User instance called me
-const me = new User_data({
-    name : 'dev' ,
-    email : 'dev263@gmail.com' ,
-    password : 'password'
-})
+//// create a new User instance called me
+// const me = new User_data({
+//     name : 'dev' ,
+//     email : 'dev263@gmail.com' ,
+//     password : 'akjadsda'
+// })
 
-me.save()                           // The .save() method returns a Promise, and you handle the result using .then() and .catch()
-    .then(() => {
-        console.log(me);
-    })
-    .catch((error) => {
-        console.log(error);
-    })
+// me.save()                           // The .save() method returns a Promise, and you handle the result using .then() and .catch()
+//     .then(() => {
+//         console.log(me);
+//     })
+//     .catch((error) => {
+//         console.log(error);
+//     })
+//
 
-
-/* example 2 
+/* example 2 = task
 
 
 // const User = mongoose.model('task' , {
@@ -88,6 +89,7 @@ me.save()                           // The .save() method returns a Promise, and
 //     }
 // })
 
+//// create a new User instance called task1
 // const task1 = new User({
 //     discription : 'this is task 1',
 //     completed : true

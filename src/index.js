@@ -104,7 +104,7 @@ app.get('/tasks' , async (req,res) => {
 
 
                                                         // route for fetching / reading all tasks = start
-app.get('/tasks/:id' , async (req,res) => {+
+app.get('/tasks/:id' , async (req,res) => {
     const _id = req.params.id ;
 
     try {

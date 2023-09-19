@@ -67,7 +67,32 @@ app.get('/users/:id', async (req,res)=>{                // '/users' is what we w
                                                     // user rest api route =  over
 
 
+app.patch('/user/:id' , async(req,res) => { 
+    const updates = Object.keys(req.body)
+    const updates_allowed_on_column = [ 'name' , 'email' , 'age' , 'password' ]     
+    const isValidOperation =  updates.every((i) => updates_allowed_on_column.includes(i))    
+    
+    if(isValidOperation===false)
+    {
+        res.status(400).send({ error : 'invalid update' })
+    }
 
+    try{
+        const user = await User.findByIdAndUpdate(req.params.id , req.body , { new : true, runValidators: true})
+
+        if(user===null){
+            res.status(404).send()
+        }
+
+        else{
+            res.send(user)
+        }
+    }
+    catch(e)
+    {
+        res.status(400).send()
+    }
+})
 
 
 // ---------------------------------------------------------------------------- Task ----------------------------------------------------------------------------
@@ -78,7 +103,7 @@ app.post('/tasks' , async (req,res)=>{                    // '/tasks' is what we
     const task = new Task(req.body);
 
     try {
-        await task.save()
+        await task.save()                                // if anything in try block gets error then catch block will be executed
         console.log(req.body)
         res.status(201).send(task)
     } 
@@ -126,6 +151,33 @@ app.get('/tasks/:id' , async (req,res) => {
 
 })
                                                         // task rest api route =  over                                                                                                                              //task rest api route =  over
+
+app.patch('/task/:id' , async(req,res) => { 
+const updates = Object.keys(req.body)
+    const updates_allowed_on_column = [ 'discription' , 'completed' ]     
+    const isValidOperation =  updates.every((i) => updates_allowed_on_column.includes(i))    
+    
+    if(isValidOperation===false)
+    {
+        res.status(400).send({ error : 'invalid update' })
+    }
+                                                        
+    try{
+        const task = await Task.findByIdAndUpdate(req.params.id , req.body , { new : true, runValidators: true})
+                                                        
+        if(task===null){
+            res.status(404).send()
+        }
+                                                        
+        else{
+            res.send(task)
+        }
+    }
+    catch(e)
+    {
+        res.status(400).send()
+    }
+})
 
 app.listen(port, ()=>{
     console.log("server is on port "+port);

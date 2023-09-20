@@ -66,17 +66,22 @@ const updates = Object.keys(req.body)
     
     if(isValidOperation===false)
     {
-        res.status(400).send({ error : 'invalid update' })
+        res.status(404).send({ error : 'invalid update' })
     }
                                                         
     try{
-        const task = await Task.findByIdAndUpdate(req.params.id , req.body , { new : true, runValidators: true})
+        const task = await Task.findById(req.params.id)
+
+        //const task = await Task.findByIdAndUpdate(req.params.id , req.body , { new : true, runValidators: true})
                                                         
         if(task===null){
             res.status(404).send()
         }
                                                         
         else{
+            updates.forEach((i) => task[i]=req.body[i])
+            await task.save()
+
             res.send(task)
         }
     }

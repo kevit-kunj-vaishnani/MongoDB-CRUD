@@ -1,6 +1,7 @@
 const mongoose = require('mongoose')  
+const bcrypt = require('bcryptjs')
 
-const Task = mongoose.model('tasks' , {      //  this written 'tasks' is tasks written in compass task-manager-api -> tasks
+const taskSchema = mongoose.Schema({        
     discription : {
         type : String
     },
@@ -9,6 +10,15 @@ const Task = mongoose.model('tasks' , {      //  this written 'tasks' is tasks w
         type : Boolean
     }
 })
+
+
+taskSchema.pre('save' , async function(next){
+    const task = this
+    next()
+})
+
+
+const Task = mongoose.model('tasks' , taskSchema )    // this written 'tasks' is tasks written in compass task-manager-api -> tasks
 
 
 module.exports = Task

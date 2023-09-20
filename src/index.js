@@ -1,4 +1,40 @@
 const express = require('express');
+require("./db/mongoose");               // for connecting to the database ( compass app)
+const User = require('./models/user');  // here we define  / given reference of model user which is a seperate file .  
+const Task = require('./models/task');  // here we define  / given reference of model task which is in a seperate file . 
+const user_Router = require('./routers/user')   // importing user file from routers folder
+const task_Router = require('./routers/task')
+
+const app = express();
+const port = process.env.PORT || 5000
+
+app.use(express.json())
+
+
+//---------------------------------------------------------------------------- User ----------------------------------------------------------------------------
+
+app.use(user_Router)
+
+// ---------------------------------------------------------------------------- Task ----------------------------------------------------------------------------
+
+app.use(task_Router)
+
+// ----------------------------------------------------------------------------  ----------------------------------------------------------------------------
+
+
+app.listen(port, ()=>{
+    console.log("server is on port "+port);
+})  
+
+
+
+
+// before making routers folder and making routing of user and task every thing was inside index.js so that code is below     
+
+// -------------------------------------------------------------- code WITH Async Await every thing inside this file ---------------------------------------------------------------------
+/*
+
+const express = require('express');
 require("./db/mongoose");   // for connecting to the database ( compass app)
 const User = require('./models/user');  // here we define  / given reference of model user which is a seperate file .  
 const Task = require('./models/task');  // here we define  / given reference of model task which is in a seperate file . 
@@ -67,7 +103,7 @@ app.get('/users/:id', async (req,res)=>{                // '/users' is what we w
                                                     // user rest api route =  over
 
 
-app.patch('/user/:id' , async(req,res) => { 
+app.patch('/users/:id' , async(req,res) => { 
     const updates = Object.keys(req.body)
     const updates_allowed_on_column = [ 'name' , 'email' , 'age' , 'password' ]     
     const isValidOperation =  updates.every((i) => updates_allowed_on_column.includes(i))    
@@ -94,6 +130,28 @@ app.patch('/user/:id' , async(req,res) => {
     }
 })
 
+
+app.delete('/users/:id' , async(req,res) => {
+    try 
+    {
+        const user = await User.findByIdAndDelete(req.params.id)
+
+        if(user===null)
+        {
+            res.status(404).send()
+        }
+
+        else
+        {
+            res.send(user)
+        }
+    } 
+    
+    catch(e)
+    {
+        res.status(500).send()
+    }
+}) 
 
 // ---------------------------------------------------------------------------- Task ----------------------------------------------------------------------------
 
@@ -152,7 +210,7 @@ app.get('/tasks/:id' , async (req,res) => {
 })
                                                         // task rest api route =  over                                                                                                                              //task rest api route =  over
 
-app.patch('/task/:id' , async(req,res) => { 
+app.patch('/tasks/:id' , async(req,res) => { 
 const updates = Object.keys(req.body)
     const updates_allowed_on_column = [ 'discription' , 'completed' ]     
     const isValidOperation =  updates.every((i) => updates_allowed_on_column.includes(i))    
@@ -179,17 +237,43 @@ const updates = Object.keys(req.body)
     }
 })
 
+app.delete('/tasks/:id' , async(req,res) => {
+    try 
+    {
+        const task = await Task.findByIdAndDelete(req.params.id)
+
+        if(task===null)
+        {
+            res.status(404).send()
+        }
+
+        else
+        {
+            res.send(task)
+        }
+    } 
+    
+    catch(e)
+    {
+        res.status(500).send()
+    }
+}) 
+
+
+
 app.listen(port, ()=>{
     console.log("server is on port "+port);
 })  
 
+*/
 
 
 
 
 
-// ------------------------------ code WITHOUT Async Await ---------------------------------------------------------------------
+// ------------------------------------------------------------------------ code WITHOUT Async Await ---------------------------------------------------------------------
 /*
+
 
 
 
@@ -323,3 +407,5 @@ app.listen(port, ()=>{
 
 
 */
+
+

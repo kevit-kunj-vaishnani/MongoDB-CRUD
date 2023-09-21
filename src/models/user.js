@@ -55,12 +55,13 @@ const userSchema = new mongoose.Schema({                                        
 })
 
 
+
 // for generating token
 userSchema.methods.generateAuthenticationToken = async function() {
     const user = this                                                                       //  this keyword ne badle user lakhsi jya jarur adse tya
     const token = jwt.sign({ _id: user._id.toString()} , 'this is web token')   // instead of 'this' keyword we will use 'user' var {_id: this._id.toString()}
 
-    user.tokens = user.tokens.concat({token:token}) // 1st tokens will be empty array. after token is generated noe it will concate and print that in tokens array 
+    user.tokens = user.tokens.concat({token:token}) // 1st tokens will be empty array. after token is generated now it will concate and print that in tokens array 
     await user.save()
 
     return token

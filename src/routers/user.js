@@ -36,7 +36,47 @@ router.post('/users/login' , async (req,res) =>{
 })
                                                                 // user rest api route =  over
                                                                 
+  
+                                                                // route for log out user =  start           // route is like /about, /help ,etc 
+router.post('/users/logout' , auth , async (req,res) => {
+    try 
+    {
+        console.log(req.token);
+        req.user.tokens = req.user.tokens.filter((i) => {
+            return i.token !== req.token
+        } )
+
+        await req.user.save()
+        res.send()
+    } 
+    
+    catch(error)
+    {
+        res.status(500).send(error)
+    }
+})
+                                                               // user rest api route =  over
                                                                 
+
+                                                                // route for log out with tokens array clear =  start           // route is like /about, /help ,etc 
+router.post('/users/logoutAll' , auth , async (req,res) => {
+    try 
+    {
+        req.user.tokens = []
+
+        await req.user.save()
+        res.send()
+    } 
+    
+    catch(error)
+    {
+        res.status(500).send(error)
+    }
+})
+                                                               // user rest api route =  over
+ 
+
+
                                                                 // (this route is for fetching / reading all users) =  start 
 // NOTE = if middleware(auth) calls the next() then only this async function will be executed       
 router.get('/users/me', auth,  async (req,res)=>{                    // '/users' is what we will give in = localhost:5000/users in mongodb database

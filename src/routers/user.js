@@ -1,5 +1,6 @@
 const express = require('express')
 const User = require('../models/user')
+const auth = require('../middleware/auth')
 
 const router = new express.Router()
 
@@ -35,17 +36,19 @@ router.post('/users/login' , async (req,res) =>{
 })
                                                                 // user rest api route =  over
                                                                 
-
-                                                        // (this route is for fetching / reading all users) =  start   
-router.get('/users', async (req,res)=>{                    // '/users' is what we will give in = localhost:5000/users in mongodb database
-    
-    try{
-        const users = await User.find({})
-        res.send(users)
-    }   
-    catch(e){
-        res.status(500).send(e)
-    }
+                                                                
+                                                                // (this route is for fetching / reading all users) =  start 
+// NOTE = if middleware(auth) calls the next() then only this async function will be executed       
+router.get('/users/me', auth,  async (req,res)=>{                    // '/users' is what we will give in = localhost:5000/users in mongodb database
+        
+    // try{
+    //     const users = await User.find({})
+    //     res.send(users)
+    // }   
+    // catch(e){
+    //     res.status(500).send(e)
+    // }
+    res.send(req.user)
 })
                                                         // user rest api route =  over
 

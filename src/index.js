@@ -2,6 +2,7 @@ const express = require('express');
 require("./db/mongoose");               // for connecting to the database ( compass app)
 const User = require('./models/user');  // here we define  / given reference of model user which is a seperate file .  
 const Task = require('./models/task');  // here we define  / given reference of model task which is in a seperate file . 
+
 const user_Router = require('./routers/user')   // importing user file from routers folder
 const task_Router = require('./routers/task')
 
@@ -10,10 +11,9 @@ const port = process.env.PORT || 5000
 
 app.use(express.json())
 
-
 //---------------------------------------------------------------------------- User ----------------------------------------------------------------------------
 
-app.use(user_Router)
+app.use(user_Router) 
 
 // ---------------------------------------------------------------------------- Task ----------------------------------------------------------------------------
 

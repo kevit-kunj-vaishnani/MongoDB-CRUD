@@ -133,7 +133,7 @@ userSchema.statics.findUserByCredentials = async (email,password) => {       // 
 
 
 // for making password into hashpassword
-userSchema.pre('save' , async function(next){
+userSchema.pre('save' , async function(next){       // save is built method . so when we will call save method in routes user it will do what we have defined here + what it is originally used for 
     const user = this
     // console.log('hi');
     
@@ -145,6 +145,15 @@ userSchema.pre('save' , async function(next){
     next( )
 })
 
+
+// delete all tasks when user deleted himself
+userSchema.post('findOneAndDelete' , async function(user){     // remove is built method . so when we will call remove method in routes user it will do what we have defined here + what it is originally used for 
+    console.log('user deleted');
+    await Task.deleteMany({ owner: user._id})
+})
+
+
+// CREATED USER MODEL with name = 'users'
 const User_data = mongoose.model('users' , userSchema )     // users is a model name
 
 module.exports = User_data

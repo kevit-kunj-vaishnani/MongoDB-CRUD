@@ -2,6 +2,7 @@ const mongoose = require('mongoose')                                            
 const validator = require('validator')
 const bcrypt = require('bcryptjs')
 const jwt = require('jsonwebtoken')
+const Task = require('./task.js')
 
 const userSchema = new mongoose.Schema({                                                                 // if we had written ("user" , {)} it becomes "users" in compass. user = collection
     name : {                                                                                           //  this written 'users' is users written in compass task-manager-api -> users
@@ -52,8 +53,43 @@ const userSchema = new mongoose.Schema({                                        
             required : true
         }
     }]
+}) 
+ 
+
+userSchema.virtual('mytasks' , {
+    ref: 'tasks',
+    localField: '_id',
+    foreignField: 'owner'
 })
 
+
+// for user data excluding 'password' and 'tokens' [array] key-value pair in postman and in database
+userSchema.methods.toJSON = function() {
+    const user = this
+    const user_Data_Object = user.toObject()
+
+//  console.log(user_Data_Object) = 
+//      {   
+//        _id: new ObjectId("650be759064fa5febffa93e6"),
+//        name: '1 patel',
+//        email: '1@gmail.com',
+//        age: 27,
+//        password: '$2a$08$i4YenP/ij6Y.tpjZfbEcq.4h8qeWOUIqUzuh8mPSBr0M7iGkW.8Rq',
+//        tokens: [
+//          {
+//            token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTBiZTc1OTA2NGZhNWZlYmZmYTkzZTYiLCJpYXQiOjE2OTUyODc0NDJ9.nAr29Ryx0OqLPI9QutzeUkVVpPxz06L84wdoFMDqhj0',
+//            _id: new ObjectId("650c0892c76fe933d8c33805")
+//          }
+//        ],
+//        __v: 40
+//      }
+
+
+    delete user_Data_Object.password
+    delete user_Data_Object.tokens
+
+    return user_Data_Object
+}
 
 
 // for generating token
@@ -112,7 +148,6 @@ userSchema.pre('save' , async function(next){
 const User_data = mongoose.model('users' , userSchema )     // users is a model name
 
 module.exports = User_data
-
 
 
 

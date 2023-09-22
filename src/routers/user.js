@@ -31,14 +31,14 @@ router.post('/users/login' , async (req,res) =>{
     }
     catch(e)
     {
-        res.status(400).send()
+        res.status(400).send(e)
     }
 })
                                                                 // user rest api route =  over
                                                                 
   
                                                                 // route for log out user =  start           // route is like /about, /help ,etc 
-router.post('/users/logout' , auth , async (req,res) => {
+router.post('/users/logout', auth, async (req,res) => {
     try 
     {
         console.log(req.token);
@@ -59,7 +59,7 @@ router.post('/users/logout' , auth , async (req,res) => {
                                                                 
 
                                                                 // route for log out with tokens array clear =  start           // route is like /about, /help ,etc 
-router.post('/users/logoutAll' , auth , async (req,res) => {
+router.post('/users/logoutAll', auth, async (req,res) => {
     try 
     {
         req.user.tokens = []
@@ -77,7 +77,7 @@ router.post('/users/logoutAll' , auth , async (req,res) => {
  
 
 
-                                                                // (this route is for fetching / reading all users) =  start 
+// Read profile                                                      // (this route is for fetching / reading all users) =  start 
 // NOTE = if middleware(auth) calls the next() then only this async function will be executed       
 router.get('/users/me', auth,  async (req,res)=>{                    // '/users' is what we will give in = localhost:5000/users in mongodb database
         
@@ -118,7 +118,7 @@ router.get('/users/:id', async (req,res)=>{                // '/users' is what w
                                                     // user rest api route =  over
 
 
-router.patch('/users/:id' , async(req,res) => {                                         // req.body =  { name: 'm1 patel', email: 'm@gmail.com' } . what you have written in compass to update in patch user.
+router.patch('/users/me', auth, async(req,res) => {                                         // req.body =  { name: 'm1 patel', email: 'm@gmail.com' } . what you have written in compass to update in patch user.
     const updates = Object.keys(req.body)                                               // Object.keys(req.body) = [name , email] = updates
     const updates_allowed_on_column = [ 'name' , 'email' , 'age' , 'password' ]     
     const isValidOperation =  updates.every((i) => updates_allowed_on_column.includes(i))    
@@ -129,47 +129,27 @@ router.patch('/users/:id' , async(req,res) => {                                 
     }
 
     try{
-        const user = await User.findById(req.params.id)
-        console.log((user));
-        //const user = await User.findByIdAndUpdate(req.params.id , req.body , { new : true, runValidators: true})
-        
-        if(user===null){
-            res.status(404).send()
-        }
-        
-        else{
-            updates.forEach((i) => user[i]=req.body[i])                     // user = {_id: new ObjectId("650a8fdeab00c33b24aa4a1a"), name: 'm1 patel' ,email: 'm@gmail.com', password: '$2a$08$t3HnaUnSyoKrqf59oaVWcuueCEkX.eW9Ml80oiBwF3PsYbdD6C532', __v: 0 } what is already in compass / database
-            await user.save()                                               // user[i]=req.body[i]   ->   user[name]=req.body[name]
+ 
+        updates.forEach((i) => req.user[i]=req.body[i])                     // user = {_id: new ObjectId("650a8fdeab00c33b24aa4a1a"), name: 'm1 patel' ,email: 'm@gmail.com', password: '$2a$08$t3HnaUnSyoKrqf59oaVWcuueCEkX.eW9Ml80oiBwF3PsYbdD6C532', __v: 0 } what is already in compass / database
+        await req.user.save()                                               // user[i]=req.body[i]   ->   user[name]=req.body[name]
 
-            res.send(user)
-        }
+        res.send(req.user)
+
     }
     catch(e)
     {
-        res.status(400).send()
+        res.status(400).send(e)
     }
 })
 
 
-router.delete('/users/:id' , async(req,res) => {
-    try 
-    {
-        const user = await User.findByIdAndDelete(req.params.id)
-
-        if(user===null)
-        {
-            res.status(404).send()
-        }
-
-        else
-        {
-            res.send(user)
-        }
-    } 
-    
-    catch(e)
-    {
-        res.status(500).send()
+router.delete('/users/me', auth,  async(req,res) => {
+    try{
+        await User.deleteOne({_id: req.user._id})
+        res.send(req.user) 
+        // console.log(req.user);   
+    }catch(e){
+        res.status(500).send(e)
     }
 }) 
 

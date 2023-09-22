@@ -7,8 +7,15 @@ const taskSchema = mongoose.Schema({
     },
 
     completed : {
-        type : Boolean
-    }
+        type : Boolean ,
+        default : false
+    },
+
+    owner : {
+        type : mongoose.Schema.Types.ObjectId ,
+        required : true ,
+        ref : 'users'                               // comes from user.js model in that mongoose.model('users' , userSchema )
+    }                                               // reference to user mongoose.model
 })
 
 

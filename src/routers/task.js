@@ -1,11 +1,15 @@
 const express = require('express')
 const Task = require('../models/task')
+const auth = require('../middleware/auth')
 
 const router = new express.Router()
 
                                                             // route for creating new task =  start  
-router.post('/tasks' , async (req,res)=>{                   // '/tasks' is what we will give in = localhost:5000/tasks in mongodb database
-    const task = new Task(req.body);
+router.post('/tasks', auth, async (req,res)=>{                   // '/tasks' is what we will give in = localhost:5000/tasks in mongodb database
+     const task = new Task({
+        ...req.body ,
+        owner : req.user._id
+     });
 
     try {
         await task.save()                                   // if anything in try block gets error then catch block will be executed
@@ -18,12 +22,37 @@ router.post('/tasks' , async (req,res)=>{                   // '/tasks' is what 
 })
                                                             // task rest api route =  over
 
-                                                            // route for fetching / reading all tasks = start
-router.get('/tasks' , async (req,res) => {
+                                                            // route for fetching / reading all tasks of user who has log in = start
+router.get('/tasks/me', auth, async (req,res) => {
     
-    try {
-        const tasks = await Task.find({})
-        res.send(tasks) 
+    try {   
+        // const tasks = await Task.find({owner:req.user._id})
+        // console.log(tasks);
+        // res.send(tasks) 
+
+        // above 3 or below 3
+        
+        await req.user.populate('mytasks')
+        console.log(req.user.mytasks);
+        /* when user is login as kunj = then all task of only kunj will be shown
+                        [
+                            {
+                                _id: new ObjectId("650c35315f23805e33c9e033"),
+                                discription: 'this is created by kunj',
+                                completed: false,
+                                owner: new ObjectId("650c32f0d50c0167667130a7"),
+                                __v: 0
+                            },
+                            {
+                                _id: new ObjectId("650d1fcf156e2157c7794710"),
+                                discription: 'today i am at home',
+                                completed: false,
+                                owner: new ObjectId("650c32f0d50c0167667130a7"),
+                                __v: 0
+                            }
+                        ]
+        */
+        res.send(req.user.mytasks) 
     } 
     catch(e) {
         res.status(500).send(e)
@@ -34,12 +63,12 @@ router.get('/tasks' , async (req,res) => {
 
 
                                                         // route for fetching / reading all tasks = start
-router.get('/tasks/:id' , async (req,res) => {
-    const _id = req.params.id ;
+router.get('/tasks/:id' ,auth ,async (req,res) => {
+    // const _id = req.params.id ;
 
     try {
-        const task = await Task.findById(_id)
-
+        const task = await Task.findOne({_id:req.params.id , owner:req.user._id})       // this req.params.id is id we will give in route '/tasks/:id'
+                                            
         if(task === null)
         {
             res.status(404).send()
@@ -59,7 +88,7 @@ router.get('/tasks/:id' , async (req,res) => {
                                                         
                                                         // route for updating 1 task = start
 
-router.patch('/tasks/:id' , async(req,res) => { 
+router.patch('/tasks/:id', auth, async(req,res) => { 
 const updates = Object.keys(req.body)
     const updates_allowed_on_column = [ 'discription' , 'completed' ]     
     const isValidOperation =  updates.every((i) => updates_allowed_on_column.includes(i))    
@@ -70,10 +99,28 @@ const updates = Object.keys(req.body)
     }
                                                         
     try{
+        /* before when no login part was introduced
+
         const task = await Task.findById(req.params.id)
 
         //const task = await Task.findByIdAndUpdate(req.params.id , req.body , { new : true, runValidators: true})
                                                         
+        if(task===null){
+            res.status(404).send()
+        }
+                                                        
+        else{
+            updates.forEach((i) => task[i]=req.body[i])
+            await task.save()
+
+            res.send(task)
+        }
+        
+        */
+
+        // now a user who has login can only update his task =
+        const task = await Task.findOne({_id: req.params.id , owner:req.user._id})
+
         if(task===null){
             res.status(404).send()
         }
@@ -93,10 +140,27 @@ const updates = Object.keys(req.body)
                                                         // task rest api route =  over 
 
                                                         // route for deleting 1 task = start
-router.delete('/tasks/:id' , async(req,res) => {
+router.delete('/tasks/:id', auth, async(req,res) => {
     try 
     {
+        /* before when no login part was introduced
+
         const task = await Task.findByIdAndDelete(req.params.id)
+
+        if(task===null)
+        {
+            res.status(404).send()
+        }
+
+        else
+        {
+            res.send(task)
+        }
+
+        */
+        
+        // now a user who has login can only delete his task =
+        const task = await Task.findOneAndDelete({_id: req.params.id, owner: req.user._id})
 
         if(task===null)
         {

@@ -97,11 +97,11 @@ router.get('/users/me', auth,  async (req,res)=>{                    // '/users'
 
 
                                                     // (this route is for fetching / reading 1 user based on id) =  start   
-router.get('/users/:id', async (req,res)=>{                // '/users' is what we will give in = localhost:5000/users in mongodb database
+router.get('/users/:id',auth ,async (req,res)=>{                // '/users' is what we will give in = localhost:5000/users in mongodb database
     const _id = req.params.id
 
     try{
-        const user = await User.findById(_id)
+        const user = await User.findById({_id:req.params.id , owner:req.user._id})
         
         if(user === null)
         {

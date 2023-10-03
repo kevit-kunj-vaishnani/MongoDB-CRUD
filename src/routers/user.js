@@ -1,6 +1,10 @@
 const express = require('express')
 const User = require('../models/user')
 const auth = require('../middleware/auth')
+const multer = require('multer')
+const sharp = require('sharp')
+const {welcome , cancel} = require('../emails/account.js')
+
 
 const router = new express.Router()
 
@@ -9,7 +13,8 @@ router.post('/users', async (req,res)=>{                           // '/users' i
     const user = new User(req.body);
 
     try{
-        await user.save()                                      // save the newly created user object to a database
+        await user.save()
+        welcome(user.email , user.name)                              // save the newly created user object to a database
         const token = await user.generateAuthenticationToken()
         console.log(req.body)
         res.status(201).send({ user: user, token: token})  // aa send thi niche print karse postman ma
@@ -149,7 +154,7 @@ router.patch('/users/me', auth, async(req,res) => {                             
 router.delete('/users/me', auth, async (req,res) => {
     try{
         const user = await User.findOneAndDelete({_id: req.user._id})     // remove is user defined method and not built in method . here as soon as this is call it will do whatever we have defined in userSchema remove in models user
-        
+        cancel(req.user.email , req.user.name)
         if (user===null ) 
         {
             res.status(400).send('User Not Found');
@@ -164,5 +169,68 @@ router.delete('/users/me', auth, async (req,res) => {
         res.status(500).send(e)
     }
 }) 
+
+
+// ------------------------------- file / photo upload ----------------------------------------------
+const upload = multer ({
+    // dest : 'avatars',        // folder name in vs code where this photos will be saved in vs code
+    limits : { 
+        fileSize:1000000
+    },
+    fileFilter(req,file,cb)
+    {
+        if(file.originalname.match(/\.(png|jpg|jpeg)$/))
+        {
+            cb(undefined,true)            
+        }
+
+        else
+        {
+           cb(new Error('please upload png / jpg / jpeg file'))
+        }
+    }
+})
+
+router.post('/users/me/avatar'  , auth ,   upload.single('avatar') ,  async (req,res)=>{                        // avatar is folder name where image is saved
+        const buffer = await sharp(req.file.buffer).resize({width:250,height:250}).png().toBuffer()    
+
+        req.user.avatar =  buffer                             // to set  
+        await req.user.save()
+        res.send()
+
+}, ( error, req, res, next ) => {                                       // this is another call back function as parameter which is used to handle error
+    res.status(400).send({'error': error.message})
+}
+);
+
+router.delete('/users/me/avatar'  , auth ,  async (req,res)=>{                        // avatar is folder name where image is saved
+
+        req.user.avatar = undefined                                     // to delete
+        await req.user.save()
+        res.send() 
+}       
+);
+
+router.get('/users/:id/avatar' , async (req, res) => {
+    try{
+        const user = await User.findById(req.params.id)
+
+        if(user===null || user.avatar===null)
+        {
+            throw new Error()
+        }
+
+        else
+        {
+            res.set('Content-Type' , 'image/jpg')
+            res.send(user.avatar)
+        }
+    }
+
+    catch(error){
+        res.status(404).send()
+    }
+})
+// -----------------------------------------------------------------------------
 
 module.exports = router

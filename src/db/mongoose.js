@@ -4,7 +4,7 @@
 const mongoose = require('mongoose')                                                             // importing mongoose npm library
 // const validator = require('validator')
 
-mongoose.connect('mongodb://localhost:27017/task-manager-api' , { useNewUrlParser : true  }  )   // for connection with task-manager-api database
+mongoose.connect(process.env.MONGODB_URL , { useNewUrlParser : true  }  )   // for connection with task-manager-api database
 //.... 
                                                                                                 //it is same as written in mongodb.js = 
                                                                                                 // MongoClient.connect( 'mongodb://localhost:27017' , { useNewUrlParser : true , useUnifiedTopology: true } , callback function )

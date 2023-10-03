@@ -12,7 +12,7 @@ const auth = async (req, res, next) => {
         -   'Bearer ' is extra which we don't want so we have used filtered_jwt
         
         */
-        const decoded = jwt.verify(filtered_jwt , 'this is web token')
+        const decoded = jwt.verify(filtered_jwt , process.env.JWT_SECRET)
         const user = await User.findOne({_id: decoded._id , 'tokens.token': filtered_jwt})
 
 /*      console.log(user)

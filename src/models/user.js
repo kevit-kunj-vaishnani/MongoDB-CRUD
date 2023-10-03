@@ -52,8 +52,16 @@ const userSchema = new mongoose.Schema({                                        
             type : String , 
             required : true
         }
-    }]
-}) 
+    }],
+
+    avatar: {
+        type: Buffer
+    }
+} , 
+    {
+        timestamps : true
+    }
+) 
  
 
 userSchema.virtual('mytasks' , {
@@ -63,7 +71,7 @@ userSchema.virtual('mytasks' , {
 })
 
 
-// for user data excluding 'password' and 'tokens' [array] key-value pair in postman and in database
+// for user data excluding 'password' and 'tokens' [array] , avatar key-value pair in postman and in database
 userSchema.methods.toJSON = function() {
     const user = this
     const user_Data_Object = user.toObject()
@@ -87,6 +95,7 @@ userSchema.methods.toJSON = function() {
 
     delete user_Data_Object.password
     delete user_Data_Object.tokens
+    delete user_Data_Object.avatar
 
     return user_Data_Object
 }
@@ -95,7 +104,7 @@ userSchema.methods.toJSON = function() {
 // for generating token
 userSchema.methods.generateAuthenticationToken = async function() {
     const user = this                                                                       //  this keyword ne badle user lakhsi jya jarur adse tya
-    const token = jwt.sign({ _id: user._id.toString()} , 'this is web token')   // instead of 'this' keyword we will use 'user' var {_id: this._id.toString()}
+    const token = jwt.sign({ _id: user._id.toString()} , process.env.JWT_SECRET)   // instead of 'this' keyword we will use 'user' var {_id: this._id.toString()}
 
     user.tokens = user.tokens.concat({token:token}) // 1st tokens will be empty array. after token is generated now it will concate and print that in tokens array 
     await user.save()
@@ -107,7 +116,7 @@ userSchema.methods.generateAuthenticationToken = async function() {
 // for login through email and password
 userSchema.statics.findUserByCredentials = async (email,password) => {       // findByCredentials is function we have made so we have to write static
     const user = await User_data.findOne( {email:email} )
-
+    console.log(user);
     if(user===null)
     {
         console.log('email invalid');

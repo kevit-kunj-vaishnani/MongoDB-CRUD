@@ -15,7 +15,10 @@ const taskSchema = mongoose.Schema({
         type : mongoose.Schema.Types.ObjectId ,
         required : true ,
         ref : 'users'                               // comes from user.js model in that mongoose.model('users' , userSchema )
-    }                                               // reference to user mongoose.model
+    }
+},
+{
+    timestamps:true
 })
 
 

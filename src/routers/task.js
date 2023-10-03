@@ -25,14 +25,35 @@ router.post('/tasks', auth, async (req,res)=>{                   // '/tasks' is 
                                                             // route for fetching / reading all tasks of user who has log in = start
 router.get('/tasks/me', auth, async (req,res) => {
     
+    const match = {}
+    const sort = {}
+
+    if(req.query.completed)
+    {
+        match.completed = req.query.completed === 'true'
+    }
+
+    if(req.query.sortBy)
+    {
+        const parts = req.query.sortBy.split(':')
+        sort[parts[0]] = parts[1] === 'desc'?-1 :  1
+    } 
+
     try {   
         // const tasks = await Task.find({owner:req.user._id})
         // console.log(tasks);
         // res.send(tasks) 
 
         // above 3 or below 3
-        
-        await req.user.populate('mytasks')
+        await req.user.populate({
+            path : 'mytasks' ,
+            match ,
+            options : {
+                limit : parseInt(req.query.limit) ,
+                skip : parseInt(req.query.skip) ,
+                sort
+            }
+        })
         console.log(req.user.mytasks);
         /* when user is login as kunj = then all task of only kunj will be shown
                         [

@@ -8,7 +8,35 @@ const task_Router = require('./routers/task');
 const { model } = require('mongoose');
 
 const app = express();
-const port = process.env.PORT || 5000
+const port = process.env.PORT
+
+// ------------------------------- file / photo upload -----------------------------------------------------------
+/*
+const multer = require('multer')
+const upload = multer({
+    dest : 'images',
+    limits : {
+        fileSize : 1000000
+    },
+    fileFilter(req,file,cb){
+        // if(file.originalname.endsWith('.jpg'))
+        if(file.originalname.match(/\.(jpg|jpeg)$/))
+        {
+            cb(undefined,true)
+        }
+
+        else
+        {
+           cb(new Error('please upload .jpg file'))
+        }
+
+    }
+})
+app.post('/upload'  ,   upload.single('upload') ,   (req,res)=>{
+    res.send();
+})
+*/
+// ---------------------------------------------------------------------------------------------------------------
 
 app.use(express.json())
 
@@ -411,31 +439,31 @@ app.listen(port, ()=>{
  
 
 
-const main = async () => { 
-    // const task = await Task.findById('650c35315f23805e33c9e033')
-    // await task.populate('owner')
-    // console.log(task);
+// const main = async () => { 
+//     // const task = await Task.findById('650c35315f23805e33c9e033')
+//     // await task.populate('owner')
+//     // console.log(task);
 
-    const user = await User.findById('650c32f0d50c0167667130a7')
-    await user.populate('mytasks')  // user will now be able to access task things. mytasks is a virtual/temp space in user database through which we will access anything of tasks.
-    /*  console.log(user.mytasks)
-            [
-            {
-                _id: new ObjectId("650c35315f23805e33c9e033"),
-                discription: 'this is created by kunj',
-                completed: false,
-                owner: new ObjectId("650c32f0d50c0167667130a7"),
-                __v: 0
-            },
-            {
-                _id: new ObjectId("650d1fcf156e2157c7794710"),
-                discription: 'today i am at home',
-                completed: false,
-                owner: new ObjectId("650c32f0d50c0167667130a7"),
-                __v: 0
-            }
-            ]
-    */
-}
+//     const user = await User.findById('650c32f0d50c0167667130a7')
+//     await user.populate('mytasks')  // user will now be able to access task things. mytasks is a virtual/temp space in user database through which we will access anything of tasks.
+//     /*  console.log(user.mytasks)
+//             [
+//             {
+//                 _id: new ObjectId("650c35315f23805e33c9e033"),
+//                 discription: 'this is created by kunj',
+//                 completed: false,
+//                 owner: new ObjectId("650c32f0d50c0167667130a7"),
+//                 __v: 0
+//             },
+//             {
+//                 _id: new ObjectId("650d1fcf156e2157c7794710"),
+//                 discription: 'today i am at home',
+//                 completed: false,
+//                 owner: new ObjectId("650c32f0d50c0167667130a7"),
+//                 __v: 0
+//             }
+//             ]
+//     */
+// }
 
-main() 
+// main() 

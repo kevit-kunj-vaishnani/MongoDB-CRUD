@@ -1,11 +1,13 @@
 
 
-const app = require('./app')
+const app = require('./app');
+const logger = require('./logger');
 const port = process.env.PORT
 
 
 app.listen(port, ()=>{
     console.log("server is on port "+port);
+    // logger.info("server is on ");
 })  
 
 

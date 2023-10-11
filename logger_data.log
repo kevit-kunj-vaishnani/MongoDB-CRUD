@@ -1,0 +1,19 @@
+{"level":"info","message":"server is on port 5000","timestamp":"2023-10-11T09:11:04.783Z"}
+{"level":"error","message":"error","timestamp":"2023-10-11T09:23:22.581Z"}
+{"level":"error","message":"error","timestamp":"2023-10-11T09:23:34.737Z"}
+{"level":"error","message":"error","timestamp":"2023-10-11T09:24:39.165Z"}
+{"level":"error","message":"error","timestamp":"2023-10-11T09:30:34.602Z"}
+{"level":"error","message":"error","timestamp":"2023-10-11T09:35:54.165Z"}
+{"level":"info","message":"server is on port 5000","timestamp":"2023-10-11T10:23:40.480Z"}
+{"level":"info","message":"server is on port 5000","timestamp":"2023-10-11T10:23:42.904Z"}
+{"level":"info","message":"server is on ","timestamp":"2023-10-11T10:25:00.854Z"}
+{"level":"info","message":"server is on ","timestamp":"2023-10-11T10:25:25.580Z"}
+{"level":"info","message":"server is on ","timestamp":"2023-10-11T10:29:12.062Z"}
+{"level":"info","message":"server is on ","timestamp":"2023-10-11T10:29:50.017Z"}
+{"level":"info","message":"server is on ","timestamp":"2023-10-11T10:30:54.885Z"}
+{"level":"info","message":"hi","timestamp":"2023-10-11T10:37:25.715Z"}
+{"level":"info","message":"undefined have login","timestamp":"2023-10-11T10:38:47.227Z"}
+{"level":"info","message":"{\n  _id: new ObjectId(\"65267896a50aa1c31d319d82\"),\n  name: 'dharmik',\n  email: 'kevit.dharmik.rathod@gmail.com',\n  age: 26,\n  password: '$2a$08$Pd44lC1cAA3J9s3QajqzG.m5FSpvJpm4osyEYZh0/5CO7XbbEEmAq',\n  tokens: [\n    {\n      token: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2NTI2Nzg5NmE1MGFhMWMzMWQzMTlkODIiLCJpYXQiOjE2OTcwMjA3NTR9.ySDXjWQpg1o7U8oiZXHv47CNVqnw78ZcCsBWJtFJgY0',\n      _id: new ObjectId(\"65267b527a356aff1d9bc5f8\")\n    }\n  ],\n  createdAt: 2023-10-11T10:27:34.393Z,\n  updatedAt: 2023-10-11T10:39:14.190Z,\n  __v: 14\n} have login","timestamp":"2023-10-11T10:39:14.196Z"}
+{"level":"info","message":"dharmik have login","timestamp":"2023-10-11T10:39:52.943Z"}
+{"level":"info","message":"dharmik have login","timestamp":"2023-10-11T10:41:45.179Z"}
+{"level":"info","message":"dharmik have logout","timestamp":"2023-10-11T10:41:53.747Z"}

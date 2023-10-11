@@ -4,6 +4,8 @@ const auth = require('../middleware/auth')
 const multer = require('multer')
 const sharp = require('sharp')
 const {welcome , cancel} = require('../emails/account.js')
+const  logger  = require('../logger.js')
+const User_data = require('../models/user')
 
 
 const router = new express.Router()
@@ -33,6 +35,9 @@ router.post('/users/login' , async (req,res) =>{
         const user = await User.findUserByCredentials(req.body.email , req.body.password)
         const token = await user.generateAuthenticationToken()
         res.send({ user:user , token:token })  // this will print in postman
+        
+        logger.info(`${user.name} have login`);
+
     }
     catch(e)
     {
@@ -53,6 +58,8 @@ router.post('/users/logout', auth, async (req,res) => {
 
         await req.user.save()
         res.send()
+
+        logger.info(`${req.user.name} have logout`);
     } 
     
     catch(error)
